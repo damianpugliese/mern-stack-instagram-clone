@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none',
         color: '#000',
         paddingLeft: '25px',
-        fontSize: '1.2em'
+        fontSize: '1.2em',
+        fontWeight: 'bold'
     }
 }));
 
@@ -47,7 +48,7 @@ const Header = () => {
                 <nav className={classes.navBar}>
                     <Link to="/signin" className={classes.links}>Signin</Link>
                     <Link to="/signup" className={classes.links}>Signup</Link>
-                    <Link to="/profile" className={classes.links}>Profile</Link>
+                    {/* <Link to="/profile" className={classes.links}>Profile</Link> */}
                 </nav>
             </Container>
         </header>

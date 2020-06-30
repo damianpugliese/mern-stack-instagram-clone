@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../../../assets/images/logo.png';
 import axios from 'axios';
+import logo from '../../../assets/images/logo.png'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, TextField, ButtonBase, Typography, InputAdornment } from '@material-ui/core';
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         padding: 35,
         maxWidth: 350,
-        [signupTheme.breakpoints.down('xs')]: {
+        [loginTheme.breakpoints.down('xs')]: {
             maxWidth: 'unset',
             width: '100%',
             background: 'transparent',
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
         padding: 20,
         marginTop: theme.spacing(2),
         maxWidth: 350,
-        [signupTheme.breakpoints.down('xs')]: {
+        [loginTheme.breakpoints.down('xs')]: {
             maxWidth: 'unset',
             width: '100%',
             background: 'transparent',
@@ -40,13 +40,7 @@ const useStyles = makeStyles(theme => ({
     },
     logo: {
         width: 175,
-        marginBottom: 20
-    },
-    signupTitle: {
-        color: 'rgba(var(--f52,142,142,142),1)',
-        textAlign: 'center',
-        fontSize: '17px',
-        fontWeight: 'bold'
+        marginBottom: 30
     },
     input: {
         marginTop: theme.spacing(1),
@@ -73,7 +67,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        margin: theme.spacing(2)
+        margin: theme.spacing(3)
     },
     adormentLetter: {
         display: 'flex',
@@ -91,7 +85,12 @@ const useStyles = makeStyles(theme => ({
         background: 'rgba(var(--b38,219,219,219),1)',
         height: '1px'
     },
-    link: {
+    linkResetPassword: {
+        textDecoration: 'none',
+        color: '#000',
+        fontSize: '12px'
+    },
+    linkSignup: {
         marginLeft: theme.spacing(1),
         textDecoration: 'none',
         color: '#0095f6',
@@ -107,7 +106,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const signupTheme = createMuiTheme({
+const loginTheme = createMuiTheme({
     breakpoints: {
         values: {
             xs: 0,
@@ -141,36 +140,26 @@ const signupTheme = createMuiTheme({
     },
 });
 
-const Signup = () => {
+const Login = () => {
 
     const classes = useStyles();
 
-    const [signupFormData, setSignupFormData] = useState({
-        username: '',
+    const [loginFormData, setLoginFormData] = useState({
         email: '',
         password: '',
-        confirmPassword: '',
         errors: {
-            username: '',
             email: '',
-            password: '',
-            confirmPassword: ''
+            password: ''
         },
     });
 
-    const [buttonSignupDisabled, setButtonSignupDisabled] = useState(true);
+    const [buttonLoginDisabled, setButtonLoginDisabled] = useState(true);
 
     const handleChange = e => {
         const { name, value } = e.target;
-        const { errors } = signupFormData;
+        const { errors } = loginFormData;
 
         switch (name) {
-            case 'username':
-                errors.username =
-                    /^\s+$/.test(value) 
-                        ? 'Field must contain almost one character'
-                        : '';
-                break;
             case 'email':
                 errors.email =
                     !(/\S+@\S+\.\S+/.test(value)) && value.length > 3
@@ -183,76 +172,40 @@ const Signup = () => {
                         ? 'Field must contain almost one character'
                         : '';
                 break;
-            case 'confirmPassword':
-                errors.confirmPassword =
-                    value !== signupFormData.password && value.length > 0
-                        ? 'Passwords do not match'
-                        : '';
-                break;
             default:
                 break;
         }
 
-        setSignupFormData({
-            ...signupFormData,
+        setLoginFormData({
+            ...loginFormData,
             [name]: value
         });
-        
     }
-    
+
     const handleSubmit = () => {
-        axios.post('/api/users/signup', signupFormData)
+        axios.post('/api/users/login', loginFormData)
             .then(res => console.log(res.data))
             .catch(err => console.log(err.response));
     }
-    
-    useEffect(()=>{
-        if (signupFormData.username.length > 0 && 
-            signupFormData.email.length > 3 && 
-            signupFormData.password.length > 5 && 
-            signupFormData.confirmPassword.length > 5 && 
-            signupFormData.errors.username.length === 0 &&
-            signupFormData.errors.email.length === 0 &&
-            signupFormData.errors.password.length === 0 &&
-            signupFormData.errors.confirmPassword.length === 0
+
+    useEffect(() => {
+        if (loginFormData.email.length > 3 &&
+            loginFormData.password.length > 5 &&
+            loginFormData.errors.email.length === 0 &&
+            loginFormData.errors.password.length === 0
         ) {
-            setButtonSignupDisabled(false)
+            setButtonLoginDisabled(false)
         } else {
-            setButtonSignupDisabled(true)
+            setButtonLoginDisabled(true)
         }
-    }, [signupFormData]);
+    }, [loginFormData]);
 
     return (
-        <ThemeProvider theme={signupTheme}>
+        <ThemeProvider theme={loginTheme}>
             <Paper variant="outlined" square className={classes.paper}>
                 <img src={logo} alt="logo" className={classes.logo} />
-                <Typography variant="h2" className={classes.signupTitle}>
-                    Signup to see your friends photos and videos
-                </Typography>
-                <div className={classes.adormentContainer}>
-                    <div className={classes.adormentLines}></div>
-                    <div className={classes.adormentLetter}>o</div>
-                    <div className={classes.adormentLines}></div>
-                </div>
                 <TextField
-                    error={signupFormData.errors.username.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="username"
-                    placeholder="Username"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="text"
-                    value={signupFormData.username}
-                    helperText={signupFormData.errors.username}
-                    InputProps={{
-                        endAdornment: (
-                            signupFormData.errors.username.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    error={signupFormData.errors.email.length > 0}
+                    error={loginFormData.errors.email.length > 0}
                     variant="outlined"
                     size="small"
                     name="email"
@@ -260,16 +213,16 @@ const Signup = () => {
                     onChange={handleChange}
                     className={classes.input}
                     type="text"
-                    value={signupFormData.email}
-                    helperText={signupFormData.errors.email}
+                    value={loginFormData.email}
+                    helperText={loginFormData.errors.email}
                     InputProps={{
                         endAdornment: (
-                            signupFormData.errors.email.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            loginFormData.errors.email.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
                         )
                     }}
                 />
                 <TextField
-                    error={signupFormData.errors.password.length > 0}
+                    error={loginFormData.errors.password.length > 0}
                     variant="outlined"
                     size="small"
                     name="password"
@@ -277,42 +230,33 @@ const Signup = () => {
                     onChange={handleChange}
                     className={classes.input}
                     type="password"
-                    value={signupFormData.password}
-                    helperText={signupFormData.errors.password}
+                    value={loginFormData.password}
+                    helperText={loginFormData.errors.password}
                     InputProps={{
                         endAdornment: (
-                            signupFormData.errors.password.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            loginFormData.errors.password.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
                         )
                     }}
                 />
-                <TextField
-                    error={signupFormData.errors.confirmPassword.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="confirmPassword"
-                    placeholder="Confirm password"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="password"
-                    value={signupFormData.confirmPassword}
-                    helperText={signupFormData.errors.confirmPassword}
-                    InputProps={{
-                        endAdornment: (
-                            signupFormData.errors.confirmPassword.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonSignupDisabled}>
-                    Signup
+                <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonLoginDisabled}>
+                    Login
                 </ButtonBase>
+                <div className={classes.adormentContainer}>
+                    <div className={classes.adormentLines}></div>
+                    <div className={classes.adormentLetter}>o</div>
+                    <div className={classes.adormentLines}></div>
+                </div>
                 {/* {error && <p className={classes.error}>{error.msg}</p>} */}
+                <Link to='/password/reset' className={classes.linkResetPassword}>
+                    Did you forget password?
+                </Link>
             </Paper>
             <Paper variant="outlined" square className={classes.paper2}>
                 <Typography variant="body2">
-                    Do you have an account?
+                    Haven´t an account?
                 </Typography>
-                <Link to='/' className={classes.link}>
-                    Login
+                <Link to='/signup' className={classes.linkSignup}>
+                    Signup
                 </Link>
             </Paper>
         </ThemeProvider>
@@ -320,4 +264,4 @@ const Signup = () => {
 
 }
 
-export default Signup;
+export default Login;

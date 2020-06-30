@@ -36,7 +36,7 @@ router.post('/signup', (req, res) => {
         .catch(() => res.status(400).json({ msg: 'Oops! Something went wrong. Please try again' }));
 });
 
-router.post('/signin', (req, res) => {
+router.post('/login', (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) return res.status(400).json({ msg: 'All fields are required' });
