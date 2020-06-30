@@ -100,7 +100,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         width: '100%',
         justifyContent: 'center',
-        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
         color: 'rgba(var(--i30,237,73,86),1)',
         fontSize: '14px'
     }
@@ -154,6 +154,7 @@ const Login = () => {
     });
 
     const [buttonLoginDisabled, setButtonLoginDisabled] = useState(true);
+    const [serverErrors, setServerErrors] = useState({});
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -185,7 +186,7 @@ const Login = () => {
     const handleSubmit = () => {
         axios.post('/api/users/login', loginFormData)
             .then(res => console.log(res.data))
-            .catch(err => console.log(err.response));
+            .catch(err => setServerErrors(err.response.data));
     }
 
     useEffect(() => {
@@ -246,7 +247,7 @@ const Login = () => {
                     <div className={classes.adormentLetter}>o</div>
                     <div className={classes.adormentLines}></div>
                 </div>
-                {/* {error && <p className={classes.error}>{error.msg}</p>} */}
+                {serverErrors.msg && <p className={classes.error}>{serverErrors.msg}</p>}
                 <Link to='/password/reset' className={classes.linkResetPassword}>
                     Did you forget password?
                 </Link>

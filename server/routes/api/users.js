@@ -7,9 +7,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 
 router.post('/signup', (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
 
-    if (!username || !email || !password) return res.status(400).json({ msg: 'All fields are required' });
+    if (!username || !email || !password || !confirmPassword) return res.status(400).json({ msg: 'All fields are required' });
+    if (!/\S+@\S+\.\S+/.test(email)) return res.status(400).json({ msg: 'Enter a valid email' });
+    if (password !== confirmPassword) return res.status(400).json({ msg: 'Passwords do not match' });
 
     User.findOne({ email })
         .then(user => {
@@ -31,7 +33,6 @@ router.post('/signup', (req, res) => {
                         .catch(() => res.status(400).json({ msg: 'Oops! Something went wrong. Please try again' }));
                 })
                 .catch(() => res.status(400).json({ msg: 'Oops! Something went wrong. Please try again' }));
-
         })
         .catch(() => res.status(400).json({ msg: 'Oops! Something went wrong. Please try again' }));
 });
@@ -69,7 +70,6 @@ router.post('/login', (req, res) => {
 
                 })
                 .catch(() => res.status(400).json({ msg: 'Oops! Something went wrong. Please try again' }));
-
         })
         .catch(() => res.status(400).json({ msg: 'Oops! Something went wrong. Please try again' }));
 });

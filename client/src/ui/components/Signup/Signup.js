@@ -159,6 +159,7 @@ const Signup = () => {
     });
 
     const [buttonSignupDisabled, setButtonSignupDisabled] = useState(true);
+    const [serverErrors, setServerErrors] = useState({});
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -203,7 +204,7 @@ const Signup = () => {
     const handleSubmit = () => {
         axios.post('/api/users/signup', signupFormData)
             .then(res => console.log(res.data))
-            .catch(err => console.log(err.response));
+            .catch(err => setServerErrors(err.response.data));
     }
     
     useEffect(()=>{
@@ -305,7 +306,7 @@ const Signup = () => {
                 <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonSignupDisabled}>
                     Signup
                 </ButtonBase>
-                {/* {error && <p className={classes.error}>{error.msg}</p>} */}
+                {serverErrors.msg && <p className={classes.error}>{serverErrors.msg}</p>}
             </Paper>
             <Paper variant="outlined" square className={classes.paper2}>
                 <Typography variant="body2">
