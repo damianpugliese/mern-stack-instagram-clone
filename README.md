@@ -1,6 +1,6 @@
-# MERN Instagram
+# MERN Instagram Clone
 
-> Mern Stack Instagram-Clone
+> Mern Stack Instagram Clone 
 
 ## Inicio Rápido
 
@@ -34,7 +34,9 @@ En el package.json de la carpeta raíz están creados los scripts para hacer el 
 
 ## Sitio Web Heroku
 
-<!-- https://merntodolist.herokuapp.com/ -->
+https://merninstagramclone.herokuapp.com/
+
+## App Info
 
 ### Autor
 
