@@ -1,7 +1,7 @@
 {
   "name": "mern-instagram-clone",
   "version": "1.0.0",
-  "description": "\"MERN Stack Instagram-Replica\"",
+  "description": "\"MERN Stack Instagram-Clone\"",
   "main": "server.js",
   "scripts": {
     "server-install": "npm install --prefix server",
