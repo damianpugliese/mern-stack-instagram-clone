@@ -1,68 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# MERN Instagram Clone
 
-## Available Scripts
+> Mern Stack Instagram Clone 
 
-In the project directory, you can run:
+## Inicio Rápido
 
-### `npm start`
+Crear un archivo .env el carpeta server y añadir su MONGO_URI. Ej.: MONGO_URI=YOUR_MONGO_URI
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+``` bash
+# Instalar dependencias (concurrently) en la carpeta raíz
+npm install
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+# Instalar dependencias en la carpeta server (Express)
+npm run server-install
 
-### `npm test`
+# Instalar dependencias en la carpeta client (React)
+npm run client-install
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Correr Cliente (client/React) y Servidor (server/Express) con concurrently simultáneamente
+npm run dev
 
-### `npm run build`
+# Correr sólo el servidor (Express) 
+npm run server
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Correr sólo el cliente (React) 
+npm run client
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+# El Servidor (Express) corre en http://localhost:5000 y el Cliente (React) en http://localhost:3000
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deployment
 
-### `npm run eject`
+En el package.json de la carpeta raíz están creados los scripts para hacer el deploy a heroku
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Sitio Web Heroku
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+https://merntodolist.herokuapp.com/
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## App Info
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Autor
 
-## Learn More
+Damián Pugliese
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Versión
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1.0.0
 
-### Code Splitting
+### Licencia
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Este proyecto tiene licencia MIT
