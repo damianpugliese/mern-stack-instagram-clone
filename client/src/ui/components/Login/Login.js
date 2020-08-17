@@ -3,11 +3,18 @@ import axios from 'axios';
 import logo from '../../../assets/images/logo.png'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, TextField, ButtonBase, Typography, InputAdornment } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Paper, TextField, ButtonBase, Typography, InputAdornment, Grid } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
     paper: {
         display: 'flex',
         width: '100%',
@@ -103,6 +110,14 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(2),
         color: 'rgba(var(--i30,237,73,86),1)',
         fontSize: '14px'
+    },
+    msgSuccess: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        marginBottom: theme.spacing(2),
+        color: '#1a8d22',
+        fontSize: '14px'
     }
 }));
 
@@ -140,7 +155,15 @@ const loginTheme = createMuiTheme({
     },
 });
 
-const Login = () => {
+const Login = ({ location }) => {
+
+    const history = useHistory();
+
+    history.listen(() => {
+        if (history.location.pathname !== '/login') {
+            history.location.state = undefined
+        }
+    });
 
     const classes = useStyles();
 
@@ -155,6 +178,7 @@ const Login = () => {
 
     const [buttonLoginDisabled, setButtonLoginDisabled] = useState(true);
     const [serverErrors, setServerErrors] = useState({});
+    const [msgSuccess, setMsgSuccess] = useState({});
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -185,9 +209,18 @@ const Login = () => {
 
     const handleSubmit = () => {
         axios.post('/api/users/login', loginFormData)
-            .then(res => console.log(res.data))
+            .then(res => {
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+            })
             .catch(err => setServerErrors(err.response.data));
     }
+
+    useEffect(() => {
+        if (location.state) {
+            setMsgSuccess(location.state.state);
+        }
+    }, []);
 
     useEffect(() => {
         if (loginFormData.email.length > 3 &&
@@ -203,63 +236,66 @@ const Login = () => {
 
     return (
         <ThemeProvider theme={loginTheme}>
-            <Paper variant="outlined" square className={classes.paper}>
-                <img src={logo} alt="logo" className={classes.logo} />
-                <TextField
-                    error={loginFormData.errors.email.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="email"
-                    placeholder="Email"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="text"
-                    value={loginFormData.email}
-                    helperText={loginFormData.errors.email}
-                    InputProps={{
-                        endAdornment: (
-                            loginFormData.errors.email.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    error={loginFormData.errors.password.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="password"
-                    value={loginFormData.password}
-                    helperText={loginFormData.errors.password}
-                    InputProps={{
-                        endAdornment: (
-                            loginFormData.errors.password.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonLoginDisabled}>
-                    Login
+            <Grid container className={classes.root}>
+                <Paper variant="outlined" square className={classes.paper}>
+                    <img src={logo} alt="logo" className={classes.logo} />
+                    <TextField
+                        error={loginFormData.errors.email.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="text"
+                        value={loginFormData.email}
+                        helperText={loginFormData.errors.email}
+                        InputProps={{
+                            endAdornment: (
+                                loginFormData.errors.email.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <TextField
+                        error={loginFormData.errors.password.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="password"
+                        value={loginFormData.password}
+                        helperText={loginFormData.errors.password}
+                        InputProps={{
+                            endAdornment: (
+                                loginFormData.errors.password.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonLoginDisabled}>
+                        Login
                 </ButtonBase>
-                <div className={classes.adormentContainer}>
-                    <div className={classes.adormentLines}></div>
-                    <div className={classes.adormentLetter}>o</div>
-                    <div className={classes.adormentLines}></div>
-                </div>
-                {serverErrors.msg && <p className={classes.error}>{serverErrors.msg}</p>}
-                <Link to='/password/reset' className={classes.linkResetPassword}>
-                    Did you forget password?
+                    <div className={classes.adormentContainer}>
+                        <div className={classes.adormentLines}></div>
+                        <div className={classes.adormentLetter}>o</div>
+                        <div className={classes.adormentLines}></div>
+                    </div>
+                    {serverErrors.msg && <p className={classes.error}>{serverErrors.msg}</p>}
+                    {msgSuccess.msg && <p className={classes.msgSuccess}>{msgSuccess.msg}</p>}
+                    <Link to='/password/reset' className={classes.linkResetPassword}>
+                        Did you forget password?
                 </Link>
-            </Paper>
-            <Paper variant="outlined" square className={classes.paper2}>
-                <Typography variant="body2">
-                    Haven´t an account?
+                </Paper>
+                <Paper variant="outlined" square className={classes.paper2}>
+                    <Typography variant="body2">
+                        Haven´t an account?
                 </Typography>
-                <Link to='/signup' className={classes.linkSignup}>
-                    Signup
+                    <Link to='/signup' className={classes.linkSignup}>
+                        Signup
                 </Link>
-            </Paper>
+                </Paper>
+            </Grid>
         </ThemeProvider>
     )
 

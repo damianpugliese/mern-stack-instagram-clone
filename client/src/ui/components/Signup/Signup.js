@@ -3,11 +3,18 @@ import logo from '../../../assets/images/logo.png';
 import axios from 'axios';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, TextField, ButtonBase, Typography, InputAdornment } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Paper, TextField, ButtonBase, Typography, InputAdornment, Grid } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
     paper: {
         display: 'flex',
         width: '100%',
@@ -145,6 +152,7 @@ const Signup = () => {
 
     const classes = useStyles();
 
+    const history = useHistory();
     const [signupFormData, setSignupFormData] = useState({
         username: '',
         email: '',
@@ -168,7 +176,7 @@ const Signup = () => {
         switch (name) {
             case 'username':
                 errors.username =
-                    /^\s+$/.test(value) 
+                    /^\s+$/.test(value)
                         ? 'Field must contain almost one character'
                         : '';
                 break;
@@ -198,20 +206,24 @@ const Signup = () => {
             ...signupFormData,
             [name]: value
         });
-        
+
     }
-    
+
     const handleSubmit = () => {
         axios.post('/api/users/signup', signupFormData)
-            .then(res => console.log(res.data))
+            .then(res => {
+                history.push('/login', {
+                    state: res.data
+                });
+            })
             .catch(err => setServerErrors(err.response.data));
     }
-    
-    useEffect(()=>{
-        if (signupFormData.username.length > 0 && 
-            signupFormData.email.length > 3 && 
-            signupFormData.password.length > 5 && 
-            signupFormData.confirmPassword.length > 5 && 
+
+    useEffect(() => {
+        if (signupFormData.username.length > 0 &&
+            signupFormData.email.length > 3 &&
+            signupFormData.password.length > 5 &&
+            signupFormData.confirmPassword.length > 5 &&
             signupFormData.errors.username.length === 0 &&
             signupFormData.errors.email.length === 0 &&
             signupFormData.errors.password.length === 0 &&
@@ -225,97 +237,99 @@ const Signup = () => {
 
     return (
         <ThemeProvider theme={signupTheme}>
-            <Paper variant="outlined" square className={classes.paper}>
-                <img src={logo} alt="logo" className={classes.logo} />
-                <Typography variant="h2" className={classes.signupTitle}>
-                    Signup to see your friends photos and videos
+            <Grid container className={classes.root}>
+                <Paper variant="outlined" square className={classes.paper}>
+                    <img src={logo} alt="logo" className={classes.logo} />
+                    <Typography variant="h2" className={classes.signupTitle}>
+                        Signup to see your friends photos and videos
                 </Typography>
-                <div className={classes.adormentContainer}>
-                    <div className={classes.adormentLines}></div>
-                    <div className={classes.adormentLetter}>o</div>
-                    <div className={classes.adormentLines}></div>
-                </div>
-                <TextField
-                    error={signupFormData.errors.username.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="username"
-                    placeholder="Username"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="text"
-                    value={signupFormData.username}
-                    helperText={signupFormData.errors.username}
-                    InputProps={{
-                        endAdornment: (
-                            signupFormData.errors.username.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    error={signupFormData.errors.email.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="email"
-                    placeholder="Email"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="text"
-                    value={signupFormData.email}
-                    helperText={signupFormData.errors.email}
-                    InputProps={{
-                        endAdornment: (
-                            signupFormData.errors.email.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    error={signupFormData.errors.password.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="password"
-                    value={signupFormData.password}
-                    helperText={signupFormData.errors.password}
-                    InputProps={{
-                        endAdornment: (
-                            signupFormData.errors.password.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    error={signupFormData.errors.confirmPassword.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="confirmPassword"
-                    placeholder="Confirm password"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="password"
-                    value={signupFormData.confirmPassword}
-                    helperText={signupFormData.errors.confirmPassword}
-                    InputProps={{
-                        endAdornment: (
-                            signupFormData.errors.confirmPassword.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
-                        )
-                    }}
-                />
-                <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonSignupDisabled}>
-                    Signup
+                    <div className={classes.adormentContainer}>
+                        <div className={classes.adormentLines}></div>
+                        <div className={classes.adormentLetter}>o</div>
+                        <div className={classes.adormentLines}></div>
+                    </div>
+                    <TextField
+                        error={signupFormData.errors.username.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="username"
+                        placeholder="Username"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="text"
+                        value={signupFormData.username}
+                        helperText={signupFormData.errors.username}
+                        InputProps={{
+                            endAdornment: (
+                                signupFormData.errors.username.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <TextField
+                        error={signupFormData.errors.email.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="text"
+                        value={signupFormData.email}
+                        helperText={signupFormData.errors.email}
+                        InputProps={{
+                            endAdornment: (
+                                signupFormData.errors.email.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <TextField
+                        error={signupFormData.errors.password.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="password"
+                        value={signupFormData.password}
+                        helperText={signupFormData.errors.password}
+                        InputProps={{
+                            endAdornment: (
+                                signupFormData.errors.password.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <TextField
+                        error={signupFormData.errors.confirmPassword.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="password"
+                        value={signupFormData.confirmPassword}
+                        helperText={signupFormData.errors.confirmPassword}
+                        InputProps={{
+                            endAdornment: (
+                                signupFormData.errors.confirmPassword.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <ButtonBase className={classes.button} onClick={handleSubmit} disabled={buttonSignupDisabled}>
+                        Signup
                 </ButtonBase>
-                {serverErrors.msg && <p className={classes.error}>{serverErrors.msg}</p>}
-            </Paper>
-            <Paper variant="outlined" square className={classes.paper2}>
-                <Typography variant="body2">
-                    Do you have an account?
+                    {serverErrors.msg && <p className={classes.error}>{serverErrors.msg}</p>}
+                </Paper>
+                <Paper variant="outlined" square className={classes.paper2}>
+                    <Typography variant="body2">
+                        Do you have an account?
                 </Typography>
-                <Link to='/' className={classes.link}>
-                    Login
+                    <Link to='/login' className={classes.link}>
+                        Login
                 </Link>
-            </Paper>
+                </Paper>
+            </Grid>
         </ThemeProvider>
     )
 

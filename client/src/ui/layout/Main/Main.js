@@ -5,14 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(theme=>({
     main: {
         display: 'flex',
-        justifyContent: 'center',
         flex: 1
     },
     mainContainer: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
     }
 }));
 

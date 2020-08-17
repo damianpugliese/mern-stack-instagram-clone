@@ -21,13 +21,14 @@ const App = () => {
         <div className="App">
             <Router>
                 <CssBaseline />
-                {/* <Header /> */}
+                <Header />
                 <Main>
                     <Switch>
-                        <Route exact path="/" component={Login} />
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/login" component={Login} />
                         <Route path="/signup" component={Signup} />
                         <Route path="/password/reset" component={ResetPassword} />
-                        {/* <Route path="/profile" component={Profile} /> */}
+                        <Route path="/profile" component={Profile} />
                     </Switch>
                 </Main>
                 <Footer/>

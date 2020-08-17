@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import lock from '../../../assets/images/lock.png'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, TextField, ButtonBase, Typography, InputAdornment } from '@material-ui/core';
+import { Paper, TextField, ButtonBase, Typography, InputAdornment, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
     paper: {
         display: 'flex',
         width: '100%',
@@ -174,7 +181,7 @@ const ResetPassword = () => {
             default:
                 break;
         }
-       
+
         setResetPasswordFormData({
             ...resetPasswordFormData,
             [name]: value,
@@ -189,49 +196,51 @@ const ResetPassword = () => {
     return (
 
         <ThemeProvider theme={resetPasswordTheme}>
-            <Paper variant="outlined" square className={classes.paper}>
-                <img src={lock} alt="logo" className={classes.lock} />
-                <Typography variant="h4" className={classes.resetTitle}>
-                    Do you have problems to Signin?
+            <Grid container className={classes.root}>
+                <Paper variant="outlined" square className={classes.paper}>
+                    <img src={lock} alt="logo" className={classes.lock} />
+                    <Typography variant="h4" className={classes.resetTitle}>
+                        Do you have problems to Signin?
                 </Typography>
-                <Typography variant="body2" className={classes.resetSubtitle}>
-                    Enter your email and we'll send you a link to recover your account
+                    <Typography variant="body2" className={classes.resetSubtitle}>
+                        Enter your email and we'll send you a link to recover your account
                 </Typography>
-                <TextField
-                    error={resetPasswordFormData.errorEmail.msg.length > 0}
-                    variant="outlined"
-                    size="small"
-                    name="email"
-                    placeholder="Email"
-                    onChange={handleChange}
-                    className={classes.input}
-                    type="text"
-                    value={resetPasswordFormData.email}
-                    helperText={resetPasswordFormData.errorEmail.msg}
-                    InputProps={{
-                        endAdornment: (
-                            resetPasswordFormData.errorEmail.msg.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon}/></InputAdornment>
-                        )
-                    }}
-                />
-                <ButtonBase className={classes.button} onClick={handleSubmit} disabled={!/\S+@\S+\.\S+/.test(resetPasswordFormData.email)}>
-                    Send me a link
+                    <TextField
+                        error={resetPasswordFormData.errorEmail.msg.length > 0}
+                        variant="outlined"
+                        size="small"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        className={classes.input}
+                        type="text"
+                        value={resetPasswordFormData.email}
+                        helperText={resetPasswordFormData.errorEmail.msg}
+                        InputProps={{
+                            endAdornment: (
+                                resetPasswordFormData.errorEmail.msg.length > 0 && <InputAdornment><HighlightOffOutlinedIcon className={classes.errorIcon} /></InputAdornment>
+                            )
+                        }}
+                    />
+                    <ButtonBase className={classes.button} onClick={handleSubmit} disabled={!/\S+@\S+\.\S+/.test(resetPasswordFormData.email)}>
+                        Send me a link
                 </ButtonBase>
-                {/* {error && <p className={classes.error}>{error.msg}</p>} */}
-                <div className={classes.adormentContainer}>
-                    <div className={classes.adormentLines}></div>
-                    <div className={classes.adormentLetter}>o</div>
-                    <div className={classes.adormentLines}></div>
-                </div>
-                <Link to='/Signup' className={classes.linkSignup}>
-                    Signup
+                    {/* {error && <p className={classes.error}>{error.msg}</p>} */}
+                    <div className={classes.adormentContainer}>
+                        <div className={classes.adormentLines}></div>
+                        <div className={classes.adormentLetter}>o</div>
+                        <div className={classes.adormentLines}></div>
+                    </div>
+                    <Link to='/signup' className={classes.linkSignup}>
+                        Signup
                 </Link>
-            </Paper>
-            <Paper variant="outlined" square className={classes.paper2}>
-                <Link to='/' className={classes.linkGoBack}>
-                    Go back to Login
+                </Paper>
+                <Paper variant="outlined" square className={classes.paper2}>
+                    <Link to='/login' className={classes.linkGoBack}>
+                        Go back to Login
                 </Link>
-            </Paper>
+                </Paper>
+            </Grid>
         </ThemeProvider>
     )
 }

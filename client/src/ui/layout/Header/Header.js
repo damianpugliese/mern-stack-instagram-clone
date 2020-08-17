@@ -46,9 +46,9 @@ const Header = () => {
                     <img src={logo} alt="logo" className={classes.logo}/>
                 </Link>
                 <nav className={classes.navBar}>
-                    <Link to="/signin" className={classes.links}>Signin</Link>
+                    <Link to="/login" className={classes.links}>Login</Link>
                     <Link to="/signup" className={classes.links}>Signup</Link>
-                    {/* <Link to="/profile" className={classes.links}>Profile</Link> */}
+                    <Link to="/profile" className={classes.links}>Profile</Link>
                 </nav>
             </Container>
         </header>
